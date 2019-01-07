@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="large-card (id, title, subject, time, image, brief)" class="card box-shadow">
+        <a th:href="@{'/article/' + ${id}}" href="#">
+            <img class="card-img-top" th:src="${image}" th:alt="${title}" height="400px">
+        </a>
+        <div class="card-body">
+            <a th:href="@{'/article/' + ${id}}" href="#">
+                <h5 th:text="${title}" class="card-title"></h5>
+            </a>
+            <p th:text="${brief}" class="card-text"></p>
+            <p th:text="${subject} + ' - ' + ${#calendars.format(time, 'dd/MM/YY')}" class="card-text"></p>
+        </div>
+    </div>
+    <div th:fragment="small-card (id, title, subject, time, image)" class="d-flex">
+        <div class="p-1">
+            <a th:href="@{'/article/' + ${id}}" href="#">
+                <img th:src="${image}" th:alt="${title}" width="100px" height="100px">
+            </a>
+        </div>
+        <div class="w-100 px-3">
+            <p th:text="${subject}" class="text-muted m-0"></p>
+            <a th:href="@{'/article/' + ${id}}" href="#">
+                <h6 th:text="${title}" class="web-news-aside-title m-0"></h6>
+            </a>
+            <p th:text="${#calendars.format(time, 'dd/MM/YY')}" class="text-muted m-0"></p>
+        </div>
+    </div>
+</body>
+</html>

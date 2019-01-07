@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="news-stream (newsStream)"
+         th:with="numberOfPages=${newsStream.getTotalPages()}, currentPage=${param.page != null ? @converter.parseInt(param.page) : 1}">
+        <div th:each="news : ${newsStream}" class="mb-3">
+            <div th:replace="fragments/news-card::large-card (${news.id}, ${news.title}, ${news.subject}, ${news.time}, ${news.image}, ${news.brief})">
+            </div>
+        </div>
+        <nav th:if="${numberOfPages > 0}" aria-label="...">
+            <ul class="pagination justify-brief-end">
+                <li th:text="'Page ' + ${currentPage} +' of ' + ${numberOfPages}" class="w-100">
+                </li>
+                <li th:classappend="${currentPage == 1} ? disabled : _" class="page-item">
+                    <a th:href="${@url.param('page', currentPage - 1) + '#news'}"
+                       class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                <li th:each="pageIndex : ${#numbers.sequence(1, numberOfPages)}"
+                    th:with="active=${currentPage == pageIndex}"
+                    th:classappend="${active} ? active : _" class="page-item">
+                    <span th:if="${active}" class="page-link">
+                        <span th:text="${pageIndex}" th:remove="tag"></span>
+                        <span class="sr-only">(current)</span>
+                    </span>
+                    <a th:unless="${active}" th:text="${pageIndex}" th:href="${@url.param('page', pageIndex) + '#news'}" class="page-link" href="#"></a>
+                </li>
+                <li th:classappend="${currentPage == numberOfPages} ? disabled : _" class="page-item">
+                    <a th:href="${@url.param('page', currentPage + 1) + '#news'}" class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div th:fragment="article (id, title, subject, time, image, brief, content)" class="card position-relative box-shadow">
+        <div class="position-absolute bg-success py-1 pr-2 pl-3 web-article-subject">
+            <h4 th:text="${subject}" class="m-0"></h4>
+        </div>
+        <a class="position-absolute btn btn-warning web-article-edit-btn" href="#" th:href="@{'/editor/' + ${id}}"><i class="fas fa-pencil-alt"></i></a>
+        <div class="card-body web-article">
+            <h3 th:text="${title}" class="card-title"></h3>
+            <h6 th:text="${subject} + ' - ' + ${#calendars.format(time, 'dd/MM/YY')}" class="card-subtitle text-muted mb-2"></h6>
+        </div>
+        <img th:src="${image}" th:alt="${title}" height="400px">
+        <div class="card-body">
+            <h5 th:text="${brief}" class="card-title"></h5>
+            <div th:utext="${content}"></div>
+        </div>
+    </div>
+
+    <div th:fragment="news-aside (title, newsAside)" class="card bg-dark box-shadow">
+        <div class="card-header text-white" th:text="${title}"></div>
+        <ul th:each="news : ${newsAside}" class="list-group list-group-flush">
+            <li th:insert="fragments/news-card::small-card (${news.id}, ${news.title}, ${news.subject}, ${news.time}, ${news.image})"
+                class="list-group-item p-2">
+            </li>
+        </ul>
+    </div>
+
+    <div th:fragment="col-8-4 (main, aside)">
+        <div class="row">
+            <div class="col-lg-8 mt-lg-4 mt-3">
+                <div th:replace="${main}"></div>
+            </div>
+            <div class="col-lg-4 mt-lg-4 mt-0">
+                <div th:insert="${aside}" class="mb-3"></div>
+                <div th:insert="${aside}" class="mb-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="newsfeed (newsStream, newsAside)" class="container web-content">
+        <h3 id="news" class="mt-lg-4 mt-3">News</h3>
+        <div class="row">
+            <div class="col-lg-8">
+                <div th:replace="::news-stream (${newsStream})"></div>
+            </div>
+            <div class="col-lg-4">
+                <div th:insert="::news-aside ('Popular news', ${newsAside})" class="mb-3"></div>
+                <div th:insert="::news-aside ('Lastest news', ${newsAside})" class="mb-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="search (newsStream, newsAside)" class="container web-content">
+        <h3 id="news" class="mt-lg-4 mt-3">Search Results</h3>
+        <div class="row">
+            <div class="col-lg-8">
+                <form class="form-group mb-1" action="/" method="GET">
+                    <div class="input-group">
+                        <input th:value="${param.search}" class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
+                        <span class="input-group-btn">
+                            <button class="btn btn-info my-2 my-sm-0" type="submit">Search</button>
+                        </span>
+                    </div>
+                </form>
+                <h5 th:text="${newsStream.getTotalElements()} + ' results found containing &quot;' + ${param.search} + '&quot;'" class="text-muted"></h5>
+                <div th:replace="::news-stream (${newsStream})"></div>
+            </div>
+            <div class="col-lg-4">
+                <div th:insert="::news-aside ('Popular news', ${newsAside})" class="mb-3"></div>
+                <div th:insert="::news-aside ('Lastest news', ${newsAside})" class="mb-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="article-aside (article, aside)" class="container web-content">
+        <div class="row">
+            <div class="col-lg-8 mt-lg-4 mt-3 mb-3">
+                <div th:replace="::article (${article.id}, ${article.title}, ${article.subject}, ${article.time}, ${article.image}, ${article.brief}, ${article.content})"></div>
+            </div>
+            <div class="col-lg-4 mt-lg-4 mt-0 mb-3">
+                <div th:insert="::news-aside ('Popular news', ${aside})" class="mb-3"></div>
+                <div th:insert="::news-aside ('Lastest news', ${aside})" class="mb-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="editor (article)" class="container web-content">
+        <div class="row">
+            <div class="col-lg-8 mt-lg-4 mt-3 mb-3">
+                <div th:if="${article}" th:replace="fragments/editor::editor (${article.id}, ${article.title}, ${article.subject}, ${article.time}, ${article.image}, ${article.brief}, ${article.content})"></div>
+                <!--<div th:unless="${article}" th:replace="fragments/editor::editor (~{}, ~{}, ~{}, ~{}, ~{}, ~{}, ~{})"></div>-->
+            </div>
+            <div class="col-lg-4 mt-lg-4 mt-0 mb-3">
+                <div th:replace="fragments/editor::editor-panel (${article})"></div>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="login" class="container d-flex align-items-center web-content">
+        <div class="m-auto web-login-panel">
+            <h1 class="display-4 text-center mb-5">Login</h1>
+            <form th:action="@{/login}" method="POST">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input th:classappend="${param.error != null} ? is-invalid : _" th:value="${username}"
+                               type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input th:classappend="${param.error != null} ? is-invalid : _"
+                               type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <p th:if="${param.error}" class="text-danger text-center w-100">Invalid username or password</p>
+                <p th:if="${param.logout}" class="text-center w-100">You have been logged out</p>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success w-100">Sign in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

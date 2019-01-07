@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::head (${article.title}, ~{::script})">
+
+    <script src="//cdn.ckeditor.com/4.9.0/standard/ckeditor.js"></script>
+    <script src="/scripts/editor.js"></script>
+
+</head>
+<body>
+<div th:replace="fragments/header::header"></div>
+<div th:replace="fragments/header::navbar"></div>
+<div th:replace="fragments/body::editor (${article})"></div>
+<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

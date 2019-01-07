@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="editor (id, title, subject, time, image, brief, content)" th:with="time=${time ?: #calendars.createNow()}" class="card position-relative box-shadow">
+        <input th:value="${id}" type="hidden" name="articleId" id="articleId">
+        <input th:value="${#calendars.format(time, 'yyyy-MM-dd')}" type="date" name="time" id="articleDate" hidden>
+        <input th:value="${#calendars.format(time, 'HH:mm:ss.SSS')}" type="time" name="time" id="articleTime" hidden>
+        <div class="position-absolute bg-success py-1 pr-2 pl-3 web-article-subject">
+            <h4 th:text="${subject} ?: Subject" class="m-0"></h4>
+        </div>
+        <div class="card-body web-article">
+            <h3 th:text="${title}" id="titleEditor" class="card-title rounded border" contenteditable="true"></h3>
+            <h6 th:text="${subject} ?: Subject + ' - ' + ${#calendars.format(time, 'dd/MM/YY')}" class="card-subtitle text-muted mb-2"></h6>
+        </div>
+        <div class="position-relative web-title-image-container">
+            <img th:hidden="${image == null}" th:src="${image}" th:alt="${title}" height="400px" class="w-100 web-title-image" id="titleImage">
+            <div th:classappend="${image} ? 'hide-control' : _" class="position-absolute w-100 web-title-image-control">
+                <div class="custom-file w-50 m-auto web-title-image-control-inner">
+                    <input type="file" name="titleImage" accept="image/jpeg, image/png, image/gif" class="custom-file-input btn-success" id="title-image-input">
+                    <label class="custom-file-label" for="title-image-input">Choose file</label>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <h5 th:text="${brief}" id="briefEditor" class="card-title rounded border" contenteditable="true"></h5>
+            <div th:utext="${content}" id="contentEditor" contenteditable="true"></div>
+        </div>
+        <script>
+            CKEDITOR.inline('titleEditor', {
+                toolbar: [{
+                    name: 'clipboard',
+                    items: [
+                        'Cut',
+                        'Copy',
+                        'Paste',
+                        '-',
+                        'Undo',
+                        'Redo'
+                    ]
+                }]
+            });
+
+            CKEDITOR.inline('briefEditor', {
+                toolbar: [{
+                    name: 'clipboard',
+                    items: [
+                        'Cut',
+                        'Copy',
+                        'Paste',
+                        '-',
+                        'Undo',
+                        'Redo'
+                    ]
+                }]
+            });
+
+            CKEDITOR.replace('contentEditor', {
+                filebrowserUploadUrl: '/api/upload',
+                height: 1000
+            });
+        </script>
+    </div>
+
+    <div th:fragment="editor-panel (article)" class="card box-shadow web-editor-panel">
+        <div class="card-header text-white bg-dark">
+            Editor
+        </div>
+        <div class="card-body">
+            <h5 th:text="'Article ID: ' + ${article.id} ?: 'None' " class="card-title"></h5>
+            <button class="btn btn-success btn-block" id="editorSave">Save</button>
+            <button th:if="${article.id != null}" class="btn btn-danger btn-block" id="editorDelete">Delete</button>
+            <h5 class="card-text text-danger" id="serverError"></h5>
+        </div>
+    </div>
+
+</body>
+</html>

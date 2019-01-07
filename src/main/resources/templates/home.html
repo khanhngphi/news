@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::head ('Hello', ~{})">
+</head>
+<body>
+    <div th:replace="fragments/header::header"></div>
+    <div th:replace="fragments/header::navbar"></div>
+    <div th:replace="fragments/header::slide"></div>
+    <!--<div>-->
+        <!--<video controls="controls">-->
+            <!--<source src="https://drive.google.com/uc?export=download&id=1AGIjONfaBzy5Qwc7DPEfz1Cy9kUzdgHG" type='video/webm'/>-->
+        <!--</video>-->
+    <!--</div>-->
+    <div th:replace="fragments/body::newsfeed (${newsStream}, ${latestNews})"></div>
+    <div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

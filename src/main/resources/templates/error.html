@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::head (${error}, ~{})">
+</head>
+<body>
+<div th:replace="fragments/header::header"></div>
+<div th:replace="fragments/header::navbar"></div>
+<div class="container text-center mt-lg-4 mt-3">
+    <h4 th:text="${status} + ' ' + ${error}" class="display-4"></h4>
+    <h5 th:text="${message}" class="text-muted"></h5>
+</div>
+<div th:replace="fragments/footer::footer"></div>
+</body>
+</html>

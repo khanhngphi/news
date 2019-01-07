@@ -1,0 +1,91 @@
+@media (max-width: 991.98px) {
+    .container {
+        width: 100%;
+        max-width: none;
+    }
+}
+body {
+    background-color: #f0f1f5;
+    min-height: 100vh;
+    position: relative;
+}
+.box-shadow {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.box-shadow-inset {
+    box-shadow: inset 0 0px 16px 2px rgba(0, 0, 0, 0.2), inset 0 0px 40px 2px rgba(0, 0, 0, 0.19);
+}
+.web-header {
+    box-shadow: inset 0 -4px 8px 0 rgba(0, 0, 0, 0.3), inset 0 -6px 20px 0 rgba(0, 0, 0, 0.25);
+}
+.web-content {
+    padding-bottom: 4.5rem;
+    min-height: 80vh;
+}
+.web-footer {
+    box-shadow: inset 0 4px 8px 0 rgba(0, 0, 0, 0.3), inset 0 6px 20px 0 rgba(0, 0, 0, 0.25);
+    position: absolute;
+    bottom: 0;
+    height: 4.5rem;
+    width: 100%;
+    z-index: 10;
+}
+.web-brand {
+    font-size: 2rem;
+}
+.web-slide-caption {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+.web-news-aside-title {
+    height: 3.5rem;
+    line-height: 1rem;
+    overflow: hidden;
+}
+.web-article {
+    padding-top: 4rem;
+    padding-bottom: 0;
+}
+.web-article-subject {
+    top: 1rem;
+    left: 0;
+}
+.web-article-edit-btn {
+    top: 0.5rem;
+    right: 0.5rem;
+}
+.web-login-panel {
+    width: 400px;
+    padding-bottom: 8rem;
+}
+.web-title-image-container {
+    height: 400px;
+    background-color: #dadbdf;
+}
+.web-title-image-container:hover > .web-title-image {
+    opacity: 0.7;
+}
+.web-title-image {
+    height: 400px;
+}
+.web-title-image-container:hover > .web-title-image-control {
+    display: block;
+}
+.web-title-image-control {
+    top: 50%;
+}
+.hide-control {
+    display: none;
+}
+.web-title-image-control-inner {
+    left: 25%;
+}
+@media (min-width: 992px) {
+    .web-editor-panel {
+        position: sticky;
+        top: 1.5rem;
+        z-index: 1020;
+    }
+}
